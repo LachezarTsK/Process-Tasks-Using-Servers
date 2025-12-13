@@ -1,6 +1,5 @@
 
 package main
-
 import "container/heap"
 
 const CURRENTLY_NOT_PROCESSING_SERVER = 0
