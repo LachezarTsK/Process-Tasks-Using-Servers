@@ -1,5 +1,4 @@
 
-
 #include <span>
 #include <queue>
 #include <vector>
@@ -9,12 +8,12 @@ using namespace std;
 class Solution {
 
     struct Server {
-        int taskCompletionTime{};
+        long long taskCompletionTime{};
         int weight{};
         int index{};
 
         Server() = default;
-        Server(int taskCompletionTime, int weight, int index) :
+        Server(long long taskCompletionTime, int weight, int index) :
             taskCompletionTime{ taskCompletionTime }, weight{ weight }, index{ index } {};
     };
 
@@ -45,15 +44,10 @@ public:
             Server serverForNextTask = getServerForNextTask(minHeapProcessingServers, minHeapAvailableServers);
             serverIndicesPerAssignedTask[taskStartTime] = serverForNextTask.index;
 
-            /*
-            Applying static_cast<long long>(serverForNextTask.taskCompletionTime - taskStartTime)
-            instead of (serverForNextTask.taskCompletionTime - taskStartTime)
-            because there is an integer overflow for some test cases.
-            */
-            int nextTaskCompletionTime =
-                    taskStartTime
-                    + tasks[taskStartTime]
-                    + max(static_cast<long long>(serverForNextTask.taskCompletionTime - taskStartTime), 0LL);
+            long long nextTaskCompletionTime =
+                             taskStartTime
+                             + tasks[taskStartTime]
+                             + max(serverForNextTask.taskCompletionTime - taskStartTime, 0LL);
 
             minHeapProcessingServers.emplace(nextTaskCompletionTime, serverForNextTask.weight, serverForNextTask.index);
         }
