@@ -3,7 +3,7 @@ import java.util.PriorityQueue;
 
 public class Solution {
 
-    private record Server(int taskCompletionTime, int weight, int index) {}
+    private record Server(long taskCompletionTime, int weight, int index) {}
 
     private static final int CURRENTLY_NOT_PROCESSING_SERVER = 0;
 
@@ -18,7 +18,7 @@ public class Solution {
             Server serverForNextTask = getServerForNextTask(minHeapProcessingServers, minHeapAvailableServers);
             serverIndicesPerAssignedTask[taskStartTime] = serverForNextTask.index;
 
-            int nextTaskCompletionTime
+            long nextTaskCompletionTime
                     = taskStartTime
                     + tasks[taskStartTime]
                     + Math.max(serverForNextTask.taskCompletionTime - taskStartTime, 0);
@@ -31,7 +31,7 @@ public class Solution {
 
     private int comparator(Server first, Server second) {
         if (first.taskCompletionTime != second.taskCompletionTime) {
-            return first.taskCompletionTime - second.taskCompletionTime;
+            return Long.compare(first.taskCompletionTime, second.taskCompletionTime);
         }
         if (first.weight != second.weight) {
             return first.weight - second.weight;
