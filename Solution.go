@@ -16,9 +16,9 @@ func assignTasks(servers []int, tasks []int) []int {
         serverIndicesPerAssignedTask[taskStartTime] = serverForNextTask.index
 
         nextTaskCompletionTime :=
-                taskStartTime +
-                tasks[taskStartTime] +
-                max(serverForNextTask.taskCompletionTime - taskStartTime, 0)
+                int64(taskStartTime) +
+                int64(tasks[taskStartTime]) +
+                max(serverForNextTask.taskCompletionTime - int64(taskStartTime), 0)
 
         heap.Push(&minHeapProcessingServers, NewServer(nextTaskCompletionTime, serverForNextTask.weight, serverForNextTask.index))
     }
@@ -42,7 +42,7 @@ func getServerForNextTask(minHeapProcessingServers *PriorityQueue, minHeapAvaila
 }
 
 func makeAvailableServersWithCompletedTasks(taskStartTime int, minHeapProcessingServers *PriorityQueue, minHeapAvailableServers *PriorityQueue) {
-    for !minHeapProcessingServers.isEmpty() && minHeapProcessingServers.Peek().(Server).taskCompletionTime <= taskStartTime {
+    for !minHeapProcessingServers.isEmpty() && minHeapProcessingServers.Peek().(Server).taskCompletionTime <= int64(taskStartTime) {
         freedServer := heap.Pop(minHeapProcessingServers).(Server)
         updatedFreedServer := NewServer(CURRENTLY_NOT_PROCESSING_SERVER, freedServer.weight, freedServer.index)
         heap.Push(minHeapAvailableServers, updatedFreedServer)
@@ -50,12 +50,12 @@ func makeAvailableServersWithCompletedTasks(taskStartTime int, minHeapProcessing
 }
 
 type Server struct {
-    taskCompletionTime int
+    taskCompletionTime int64
     weight             int
     index              int
 }
 
-func NewServer(taskCompletionTime int, weight int, index int) Server {
+func NewServer(taskCompletionTime int64, weight int, index int) Server {
     server := Server{
         taskCompletionTime: taskCompletionTime,
         weight:             weight,
