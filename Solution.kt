@@ -3,10 +3,10 @@ import kotlin.math.max
 
 class Solution {
 
-    private data class Server(val taskCompletionTime: Int, val weight: Int, val index: Int) {}
+    private data class Server(val taskCompletionTime: Long, val weight: Int, val index: Int) {}
 
     private companion object {
-        const val CURRENTLY_NOT_PROCESSING_SERVER = 0
+        const val CURRENTLY_NOT_PROCESSING_SERVER: Long = 0
     }
 
     fun assignTasks(servers: IntArray, tasks: IntArray): IntArray {
@@ -33,7 +33,7 @@ class Solution {
 
     private fun comparator(first: Server, second: Server): Int {
         if (first.taskCompletionTime != second.taskCompletionTime) {
-            return first.taskCompletionTime - second.taskCompletionTime
+            return first.taskCompletionTime.compareTo(second.taskCompletionTime)
         }
         if (first.weight != second.weight) {
             return first.weight - second.weight
