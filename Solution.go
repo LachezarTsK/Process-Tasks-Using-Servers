@@ -35,14 +35,14 @@ func createMinHeapAvailableServers(servers []int) PriorityQueue {
 }
 
 func getServerForNextTask(minHeapProcessingServers *PriorityQueue, minHeapAvailableServers *PriorityQueue) Server {
-    if !minHeapAvailableServers.isEmpty() {
+    if !minHeapAvailableServers.IsEmpty() {
         return heap.Pop(minHeapAvailableServers).(Server)
     }
     return heap.Pop(minHeapProcessingServers).(Server)
 }
 
 func makeAvailableServersWithCompletedTasks(taskStartTime int, minHeapProcessingServers *PriorityQueue, minHeapAvailableServers *PriorityQueue) {
-    for !minHeapProcessingServers.isEmpty() && minHeapProcessingServers.Peek().(Server).taskCompletionTime <= int64(taskStartTime) {
+    for !minHeapProcessingServers.IsEmpty() && minHeapProcessingServers.Peek().(Server).taskCompletionTime <= int64(taskStartTime) {
         freedServer := heap.Pop(minHeapProcessingServers).(Server)
         updatedFreedServer := NewServer(CURRENTLY_NOT_PROCESSING_SERVER, freedServer.weight, freedServer.index)
         heap.Push(minHeapAvailableServers, updatedFreedServer)
@@ -103,6 +103,6 @@ func (pq PriorityQueue) Peek() any {
     return pq[0]
 }
 
-func (pq PriorityQueue) isEmpty() bool {
+func (pq PriorityQueue) IsEmpty() bool {
     return pq.Len() == 0
 }
