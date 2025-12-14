@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class Solution
 {
-    private record Server(int taskCompletionTime, int weight, int index) { }
+    private record Server(long taskCompletionTime, int weight, int index) { }
 
     private static readonly int CURRENTLY_NOT_PROCESSING_SERVER = 0;
 
@@ -21,7 +21,7 @@ public class Solution
             Server serverForNextTask = GetServerForNextTask(minHeapProcessingServers, minHeapAvailableServers);
             serverIndicesPerAssignedTask[taskStartTime] = serverForNextTask.index;
 
-            int nextTaskCompletionTime
+            long nextTaskCompletionTime
                     = taskStartTime
                     + tasks[taskStartTime]
                     + Math.Max(serverForNextTask.taskCompletionTime - taskStartTime, 0);
@@ -38,7 +38,7 @@ public class Solution
     {
         if (first.taskCompletionTime != second.taskCompletionTime)
         {
-            return first.taskCompletionTime - second.taskCompletionTime;
+            return first.taskCompletionTime.CompareTo(second.taskCompletionTime);
         }
         if (first.weight != second.weight)
         {
